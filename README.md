@@ -1,9 +1,46 @@
-# privateGPT
+# PrivateGPT
+ - github: https://github.com/imartinez/privateGPT
+ - install steps: https://ecoagi.ai/topics/ChatGPT/privategpt
+ - local venv: C:\Users\zjc10\Desktop\Projects\envs\p_gpt\Scripts\activate.bat
+
+# Project Overview
 Ask questions to your documents without an internet connection, using the power of LLMs. 100% private, no data leaves your execution environment at any point. You can ingest documents and ask questions without an internet connection!
 
 Built with [LangChain](https://github.com/hwchase17/langchain), [GPT4All](https://github.com/nomic-ai/gpt4all), [LlamaCpp](https://github.com/ggerganov/llama.cpp), [Chroma](https://www.trychroma.com/) and [SentenceTransformers](https://www.sbert.net/).
 
 <img width="902" alt="demo" src="https://user-images.githubusercontent.com/721666/236942256-985801c9-25b9-48ef-80be-3acbb4575164.png">
+
+# Pre-setup Requirments (Windows)
+1. Change Powershell Execution Policy to Enable Running applications from terminal 
+   - open powershell as administrator and execute the below 
+      ```powershell
+      set-executionpolicy RemoteSigned
+      ```
+2. download c++ compliers from vs studio 2019-2022 
+   - open visual studio 2019 -> tools -> get tools and features -> select C++ for desktop
+
+3. download any python executable >= 3.10 and create venv for privateGpt
+   ```powershell
+      cd C:\Users\zjc10\Desktop\Utils\Python_Executables
+      wget https://www.python.org/ftp/python/3.10.1/python-3.10.7-amd64.exe 
+   ```
+
+4. create and activate new virtual env for PrivateGPT use and upgrade pip (powershell)
+   ```powershell
+      C:\Users\zjc10\Desktop\Utils\Python_Executables\py_3107\python -m venv p_gpt
+      C:\Users\zjc10\Desktop\Projects\envs\p_gpt\Scripts\activate.ps1
+      C:\Users\zjc10\Desktop\Projects\envs\p_gpt\Scripts\python.exe -m pip install --upgrade pip
+   ```
+
+5. INSTALL OpenBLAS and set CMAKE args env var in powershell 
+   ```powershell
+   $env:CMAKE_ARGS = "-DLLAMA_OPENBLAS=on"
+   ```
+ 
+6. Clone the PrivateGPT repo into your project folder
+   ```gitbash
+   git clone https://github.com/imartinez/privateGPT.git C:\Users\zjc10\Desktop\Projects\code\private_gpt
+   ```
 
 # Environment Setup
 In order to set your environment up to run the code here, first install all requirements:
@@ -40,8 +77,20 @@ MODEL_N_BATCH: Number of tokens in the prompt that are fed into the model at a t
 EMBEDDINGS_MODEL_NAME: SentenceTransformers embeddings model name (see https://www.sbert.net/docs/pretrained_models.html)
 TARGET_SOURCE_CHUNKS: The amount of chunks (sources) that will be used to answer a question
 ```
+below is zacks local environment setup 
+```
+PERSIST_DIRECTORY= C:\Users\zjc10\Desktop\Projects\data\private_gpt_chroma_vecdb
+MODEL_TYPE=GPT4All
+MODEL_PATH =C:\Users\zjc10\Desktop\Utils\embeddings\gpt4all_models\wizardlm-13b-v1.1-superhot-8k.ggmlv3.q4_0.bin
+EMBEDDINGS_MODEL_NAME=all-MiniLM-L6-v2
+MODEL_N_CTX=1000
+MODEL_N_BATCH=8
+TARGET_SOURCE_CHUNKS=4
 
+```
 Note: because of the way `langchain` loads the `SentenceTransformers` embeddings, the first time you run the script it will require internet connection to download the embeddings model itself.
+
+
 
 ## Test dataset
 This repo uses a [state of the union transcript](https://github.com/imartinez/privateGPT/blob/main/source_documents/state_of_the_union.txt) as an example.
